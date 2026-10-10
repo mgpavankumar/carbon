@@ -1,57 +1,73 @@
 # College Records API · Hono & Prisma
 
-A PostgreSQL-backed API learning project for student records, professors, proctorships, and library memberships.
+A PostgreSQL-backed API for students, professors, proctorships, and library memberships.
 
-**Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)  
+**Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)
 **Status:** Educational project
 
 ## Features
 
-- Manage student and professor records
+- Create, update, retrieve, and delete college records
 - Assign students to professor proctorships
-- Create, retrieve, update, and delete library memberships
-- Fetch students with related proctor details
+- Validate dates and membership periods
+- Remove a student and membership atomically
 
 ## Getting started
 
-Install Node.js and npm. Clone this repository:
+Install Node.js 22 or newer and npm. Clone this repository:
 
 ```bash
 git clone https://github.com/mgpavankumar/carbon.git
 cd carbon
 ```
 
-For local development, create `.env` in the repository root:
-
-```dotenv
-DATABASE_URL="postgresql://app_user:replace_with_local_password@localhost:5432/carbon_dev?schema=public"
+```bash
+npm ci
 ```
 
-Replace the placeholder values with your local PostgreSQL settings. Keep `.env` out of version control.
+Copy `.env.example` to `.env` and set `DATABASE_URL` for a dedicated local PostgreSQL database. Keep `.env` out of version control. Then run:
 
 ```bash
-npm install
-npx prisma generate
-npx prisma migrate dev
-npm run dev
+npm run db:generate
+npm run db:migrate
+npm run build
+npm start
 ```
+
+`npm start` runs the TypeScript entry point with the Node.js `tsx` loader. `npm run build` emits JavaScript into `dist/src`. `npm run dev` watches source files. The server listens on port 3000 unless `PORT` is set.
+
+## Tests
+
+Use a dedicated test database with the migrations applied. Set `TEST_DATABASE_URL` to its connection URL before running `npm test`. Tests create synthetic records and clean up only their own records. GitHub Actions provisions PostgreSQL 16 and runs migrations, compilation, and tests.
+
+```bash
+npm run typecheck
+npm test
+```
+
+See [TEST_RESULTS.md](TEST_RESULTS.md) for recorded local verification and its limits.
 
 ## Project structure
 
 | Path | Purpose |
 | --- | --- |
-| `src/index.ts` | HTTP endpoints and Prisma queries |
-| `prisma/schema.prisma` | Student, professor, and library membership models |
-| `prisma/migrations/` | Committed database migrations |
+| `src/app.ts` | Application logic and/or demonstration |
+| `src/index.ts` | Server entry point |
+| `tests/` | Automated regression checks |
+| `tsconfig.json` | Strict ESM compilation settings |
+| `prisma/schema.prisma` | Database models |
+| `prisma/migrations/` | Versioned SQL migrations |
+| `.env.example` | Placeholder local configuration |
 
 ## Current behavior and limitations
 
-Create a local `.env` with `DATABASE_URL` before running Prisma commands. Use a dedicated development database: migrate dev can prompt for schema resets. The API currently has no authentication or access control. Use synthetic records for demonstrations. Error handling often returns 404 for database failures; refine status codes and validation before deployment.
+This learning API has no authentication or access control. Student and membership timestamps require ISO 8601 with a timezone. Duplicate records return 409, missing records 404, invalid input 400, and unexpected database errors 500. Use synthetic identity data when demonstrating this project.
 
-## Routes declared in the source
+## HTTP routes
 
 | Method | Path |
 | --- | --- |
+| GET | `/` |
 | GET | `/students` |
 | GET | `/students/enriched` |
 | GET | `/professors` |
@@ -68,16 +84,6 @@ Create a local `.env` with `DATABASE_URL` before running Prisma commands. Use a 
 | PATCH | `/students/:studentId/library-membership` |
 | DELETE | `/students/:studentId/library-membership` |
 
-## Planned improvements
-
-- Add request validation and consistent error responses
-- Add authentication and access rules
-- Separate routes and database services
-
 ## Contributing
 
-Open an issue describing the problem or proposed improvement. Keep pull requests focused and include the steps used to verify changes. Use sample data and keep credentials out of commits.
-
-## Verification
-
-This documentation was checked against the committed source files, dependency declarations, and route definitions. Installation, compilation, database setup, and runtime behavior have not been verified by this documentation update. There is no automated test suite in the current repository.
+Keep changes focused, use synthetic data, and include steps or tests demonstrating the fix. Do not commit local configuration or credentials.
