@@ -1,5 +1,7 @@
 # College Records API · Hono & Prisma
 
+[![CI](https://github.com/mgpavankumar/carbon/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/carbon/actions/workflows/ci.yml)
+
 A PostgreSQL-backed API for students, professors, proctorships, and library memberships.
 
 **Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)
@@ -51,7 +53,7 @@ See [TEST_RESULTS.md](TEST_RESULTS.md) for recorded local verification and its l
 
 | Path | Purpose |
 | --- | --- |
-| `src/app.ts` | Application logic and/or demonstration |
+| `src/app.ts` | HTTP application, routes, and request validation |
 | `src/index.ts` | Server entry point |
 | `tests/` | Automated regression checks |
 | `tsconfig.json` | Strict ESM compilation settings |
@@ -83,6 +85,17 @@ This learning API has no authentication or access control. Student and membershi
 | POST | `/students/:studentId/library-membership` |
 | PATCH | `/students/:studentId/library-membership` |
 | DELETE | `/students/:studentId/library-membership` |
+
+## Try the API
+
+Use synthetic identity data in a local development database:
+
+```bash
+curl -i http://localhost:3000/students -H 'Content-Type: application/json' -d '{"name":"Demo Student","dateOfBirth":"2000-01-01T00:00:00Z","aadharNumber":"synthetic-demo-student-001"}'
+curl -i http://localhost:3000/students/enriched
+```
+
+Expect HTTP 201 for creation and HTTP 200 with a list for retrieval. A repeated identity value returns 409. On Windows PowerShell use `curl.exe`.
 
 ## Contributing
 
