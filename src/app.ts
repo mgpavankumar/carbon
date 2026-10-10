@@ -1,3 +1,5 @@
+import { bodyLimit } from 'hono/body-limit';
+import { secureHeaders } from 'hono/secure-headers';
 import { Hono } from 'hono';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { HTTPException } from 'hono/http-exception';
@@ -11,6 +13,12 @@ const membershipSchema = z.object({ issueDate: date, expiryDate: date }).strict(
 
 export function createApp(prisma: PrismaClient) {
   const app = new Hono();
+  app.use('*', secureHeaders());
+  app.use('*', bodyLimit({ maxSize: 64 * 1024, onError: c => c.json({ error: 'Request body exceeds 64 KiB' }, 413) }));
+  app.use('*', async (c, next) => {
+    c.header('Cache-Control', 'no-store');
+    await next();
+  });
   app.onError((error, c) => {
     if (error instanceof HTTPException) return c.json({ error: error.message }, error.status);
     if (error instanceof z.ZodError || error instanceof SyntaxError) return c.json({ error: 'Invalid request body' }, 400);

@@ -100,3 +100,7 @@ Expect HTTP 201 for creation and HTTP 200 with a list for retrieval. A repeated 
 ## Contributing
 
 Keep changes focused, use synthetic data, and include steps or tests demonstrating the fix. Do not commit local configuration or credentials.
+
+## HTTP safeguards
+
+Requests are limited to 64 KiB and oversized payloads return JSON with HTTP 413. Responses include Hono security headers. Responses use `Cache-Control: no-store` to discourage caching tokens and personal records.
