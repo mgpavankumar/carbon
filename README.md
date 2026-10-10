@@ -1,6 +1,6 @@
 # College Records API · Hono & Prisma
 
-[![CI](https://github.com/mgpavankumar/carbon/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/carbon/actions/workflows/ci.yml)
+[![CI](https://github.com/mgpavankumar/college-records-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/college-records-api/actions/workflows/ci.yml)
 
 A PostgreSQL-backed API for students, professors, proctorships, and library memberships.
 
@@ -19,8 +19,8 @@ A PostgreSQL-backed API for students, professors, proctorships, and library memb
 Install Node.js 22 or newer and npm. Clone this repository:
 
 ```bash
-git clone https://github.com/mgpavankumar/carbon.git
-cd carbon
+git clone https://github.com/mgpavankumar/college-records-api.git
+cd college-records-api
 ```
 
 ```bash
