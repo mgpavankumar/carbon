@@ -63,7 +63,7 @@ See [TEST_RESULTS.md](TEST_RESULTS.md) for recorded local verification and its l
 
 ## Current behavior and limitations
 
-This learning API has no authentication or access control. Student and membership timestamps require ISO 8601 with a timezone. Duplicate records return 409, missing records 404, invalid input 400, and unexpected database errors 500. Use synthetic identity data when demonstrating this project.
+Production mode requires a server-held service API key; this provides trusted service access, not end-user roles or record ownership. See [PRODUCTION.md](PRODUCTION.md) before deployment. Student and membership timestamps require ISO 8601 with a timezone. Duplicate records return 409, missing records 404, invalid input 400, and unexpected database errors 500. Use synthetic identity data when demonstrating this project.
 
 ## HTTP routes
 
@@ -104,3 +104,7 @@ Keep changes focused, use synthetic data, and include steps or tests demonstrati
 ## HTTP safeguards
 
 Requests are limited to 64 KiB and oversized payloads return JSON with HTTP 413. Responses include Hono security headers. Responses use `Cache-Control: no-store` to discourage caching tokens and personal records.
+
+## Deployment safeguards
+
+Compiled startup, startup validation, health/readiness probes, request IDs, and bounded graceful shutdown are covered in [PRODUCTION.md](PRODUCTION.md).
